@@ -7,7 +7,7 @@ when used you can delete and restore deleted items unless it was hard deleted fr
 ## Installation
 
 ```
-pip install django-soft-delete
+pip install dj-soft-delete
 ```
 
 ## Usage
