@@ -1,52 +1,62 @@
 # Soft Delete
+
+This package is used for implementing soft delete functionality in models,
+when used you can delete and restore deleted items unless it was hard deleted from the database.
+
+
 ## Installation
-```python
-pip install django-generic-delete
+
 ```
-
-## Configuration
-
-```python
-INSTALLED_APPS = [
-  ....
-'softdelete',
-]
+pip install django-soft-delete
 ```
-
-
-### in urls
-```python
-urlpatterns = [
-    ....
-    path('delete/', include('softdelete.urls', namespace='softdelete'))
-]
-```
-
 
 ## Usage
 
-### In models
-* Extend 
-```python
-
-# import this
-from softdelete.models import SoftDeletionModel
-
-
-class YourModel(SoftDeletionModel):
-    # your fields
-    pass
+you can use it by extending `HasSoftDelete` class in your model
 
 ```
+    from django_soft_delete.models import HasSoftDelete
+    
+    
+    class Item(HasSoftDelete):
+        ...
+```
 
-## Override templates
+* **retrieving items without deleted**
+```
+    Item.objects.all()
+```
 
-* in your ``templates``
+* **retrieving items with deleted**
+```
+    Item.with_trashed_objects.all()
+```
 
-add the following directory
+* **retrieving deleted items only
+```
+    Item.with_trashed_objects.deleted()
+```
+* **Soft deleting item**
+```
+    # via objects manager
+    Item.objects.filter(...).delete()
+
+    # via model instance
+    item = Item.objects.get(...)
+    item.delete()
+```
+* **herd deleting items**
+```
+    # via objects manager
+    Item.objects.filter(...).hard_delete()
+
+    # via model instance
+    item = Item.objects.get(...)
+    item.hard_delete()
+```
+
+* **Restore soft deleted items**
 
 ```
-templates/
-    softdelete/
-      delete.configuration.html
+    Item.with_trashed_objects.filter(...).restore()
 ```
