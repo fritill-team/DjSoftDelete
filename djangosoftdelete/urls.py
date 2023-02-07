@@ -16,7 +16,4 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('delete/', include('django_soft_delete.urls', namespace='softdelete'))
-]
+urlpatterns = []
