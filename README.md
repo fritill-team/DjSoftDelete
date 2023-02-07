@@ -58,5 +58,10 @@ you can use it by extending `HasSoftDelete` class in your model
 * **Restore soft deleted items**
 
 ```
+    # via objects manager
     Item.with_trashed_objects.filter(...).restore()
+    
+    # via model instance
+    item = Item.with_trashed_objects.get(...)
+    item.restore()
 ```

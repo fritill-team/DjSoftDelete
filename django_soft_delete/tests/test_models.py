@@ -43,6 +43,15 @@ class HasSoftDeleteStructureTestCase(TestCase):
         actual_signature = inspect.getfullargspec(HasSoftDelete.hard_delete)[0]
         self.assertEquals(actual_signature, expected_signature)
 
+    def test_it_has_restore_method(self):
+        self.assertTrue(hasattr(HasSoftDelete, 'restore'))
+        self.assertTrue(callable(HasSoftDelete.restore))
+
+    def test_restore_signature(self):
+        expected_signature = ['self']
+        actual_signature = inspect.getfullargspec(HasSoftDelete.restore)[0]
+        self.assertEquals(actual_signature, expected_signature)
+
 
 class HasSoftDeleteDeleteTestCase(TestCase):
     def setUp(self):
@@ -59,6 +68,18 @@ class HasSoftDeleteDeleteTestCase(TestCase):
         self.obj.refresh_from_db()
         self.assertIsNotNone(self.obj.deleted_at)
         self.assertIsInstance(self.obj.deleted_at, datetime.datetime)
+
+
+class HasSoftDeleteRestoreTestCase(TestCase):
+    def setUp(self):
+        self.obj = TestModel.objects.create(title='new model')
+        self.obj.delete()
+        self.obj.refresh_from_db()
+
+    def test_it_updates_object_instance_deleted_at_to_now(self):
+        self.obj.restore()
+        self.obj.refresh_from_db()
+        self.assertIsNone(self.obj.deleted_at)
 
 
 class HasSoftDeleteHardDeleteTestCase(TestCase):

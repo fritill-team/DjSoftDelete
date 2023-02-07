@@ -42,9 +42,13 @@ class HasSoftDelete(models.Model):
 
     def delete(self, *args, **kwargs):
         if self.deleted_at:
-            raise ObjectDoesNotExist("This object was deleted before!")
+            raise ObjectDoesNotExist(_("This object was deleted before!"))
         self.deleted_at = now()
         self.save()
 
     def hard_delete(self):
         return super(HasSoftDelete, self).delete()
+
+    def restore(self):
+        self.deleted_at = None
+        self.save()
